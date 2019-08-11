@@ -1,5 +1,5 @@
 " Useful resuorces
-" :help - defacto vim manual
+" :help - vim manual
 " https://begriffs.com/posts/2019-07-19-history-use-vim.html
 " http://learnvimscriptthehardway.stevelosh.com/
 " 
