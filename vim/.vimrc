@@ -1,5 +1,30 @@
+" Useful resuorces
+" :help - defacto vim manual
+" https://begriffs.com/posts/2019-07-19-history-use-vim.html
+" http://learnvimscriptthehardway.stevelosh.com/
+" 
+
 set nocompatible              " required
 filetype off                  " required
+
+" Editing backup
+" Protect changes between writes. Default values of
+" updatecount (200 keystrokes) and updatetime
+" (4 seconds) are fine
+set swapfile
+set directory^=~/.vim/swap//
+
+" protect against crash-during-write
+set writebackup
+" but do not persist backup after successful write
+set nobackup
+
+" quickfix shortcuts - navigate through the errors displayed in quickfix
+" buffer
+nmap ]q :cnext<cr>
+nmap ]Q :clast<cr>
+nmap [q :cprev<cr>
+nmap [Q :cfirst<cr>
 
 " set the runtime path to include Vundle and initialize
 set rtp+=~/.vim/bundle/Vundle.vim
@@ -22,9 +47,6 @@ Plugin 'vim-scripts/indentpython.vim'
 " enable auto-complete
 Plugin 'Valloric/YouCompleteMe'
 
-" enable vim to check your syntax
-Plugin 'scrooloose/syntastic'
-
 " Checking PEP8 syntax
 Plugin 'nvie/vim-flake8'
 
@@ -33,11 +55,6 @@ Plugin 'rafi/awesome-vim-colorschemes'
 
 " Enable super(fuzzy) searching in VIM by ctrl + p, which similar to Sublime
 Plugin 'kien/ctrlp.vim'
-
-" Enable us to perform some git commands without leaving the comfort of vim.
-" Use such command when there is not so much output generated. It also
-" provides many shortcuts.
-Plugin 'tpope/vim-fugitive'
 
 " enable better json view
 Plugin 'elzr/vim-json'
@@ -48,9 +65,6 @@ Plugin 'majutsushi/tagbar'
 
 " Enable rainbow highlighting of matching parenthesis
 Plugin 'luochen1990/rainbow'
-
-" utils to speed up html / css workflow on vim 
-Plugin 'mattn/emmet-vim'
 
 " auto pair braces
 Plugin 'jiangmiao/auto-pairs'
@@ -121,7 +135,7 @@ highlight BadWhitespace ctermbg=red guibg=red
 " enable line number!
 set nu
 " Uncomment this line if you want to enable mouse in VIM
-" set mouse=a
+set mouse=n
 
 "Flag unnecessary spaces in Python code
 au BufRead,BufNewFile *.py,*.pyw,*.c,*.h match BadWhitespace /\s\+$/
@@ -151,14 +165,14 @@ if (has("termguicolors"))
 endif
 
 " Switch color scheme between GUI and terminal mode
-if has('gui_running')
-  set background=light
-  colorscheme solarized8
-else
+" if has('gui_running')
+"   set background=light
+"   colorscheme solarized8
+" else
   " let g:seoul256_background = 233
-  colorscheme deus
-  let g:deus_termcolors=256
-endif
+colorscheme deus
+let g:deus_termcolors=256
+" endif
 
 " Switch between Solarized dark and light theme by pressing F5
 " call togglebg#map("<F5>")
@@ -193,39 +207,6 @@ nmap =j :%!python -m json.tool<CR>
 
 " shortcut to open a vertical termianl window
 command Vter vertical terminal
-
-" gotags + tagbar
-let g:tagbar_type_go = {
-	\ 'ctagstype' : 'go',
-	\ 'kinds'     : [
-		\ 'p:package',
-		\ 'i:imports:1',
-		\ 'c:constants',
-		\ 'v:variables',
-		\ 't:types',
-		\ 'n:interfaces',
-		\ 'w:fields',
-		\ 'e:embedded',
-		\ 'm:methods',
-		\ 'r:constructor',
-		\ 'f:functions'
-	\ ],
-	\ 'sro' : '.',
-	\ 'kind2scope' : {
-		\ 't' : 'ctype',
-		\ 'n' : 'ntype'
-	\ },
-	\ 'scope2kind' : {
-		\ 'ctype' : 't',
-		\ 'ntype' : 'n'
-	\ },
-	\ 'ctagsbin'  : 'gotags',
-	\ 'ctagsargs' : '-sort -silent'
-\ }
-
-" run goimports on save
-" https://leanpub.com/productiongo/read#leanpub-auto-vim
-let g:go_fmt_command="goimports"
 
 " Vim airline buffer line
 let g:airline#extensions#tabline#enabled = 1
