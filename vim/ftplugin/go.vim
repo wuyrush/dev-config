@@ -1,4 +1,5 @@
 " Set according to Google Go codestyle
+" Well, after using vim-go we may no longer need this; We can just keep the tagbar support
 
 setlocal tabstop=4
 setlocal softtabstop=4
