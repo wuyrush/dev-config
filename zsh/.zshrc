@@ -64,7 +64,7 @@ ZSH_THEME="ys"
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
 plugins=(
-  git osx golang python autojump docker docker-compose
+  git osx golang autojump docker docker-compose
 )
 
 source $ZSH/oh-my-zsh.sh
@@ -76,8 +76,18 @@ source $ZSH/oh-my-zsh.sh
 # You may need to manually set your language environment
 # export LANG=en_US.UTF-8
 
+### Vim ###
+# use Vim from HomeBrew instead
+VIM_HOME="/Applications/MacVim.app/Contents/bin"
+export PATH=$VIM_HOME:$PATH
+# note the real vi is not able to copy stuff to clipboard; Thus we need to point it to
+# vim which is capable doing so
+alias vi=$VIM_HOME/vim
+
 # Preferred editor for local and remote sessions
 export EDITOR=vim
+# specify editor for Git
+export GIT_EDITOR=vim
 
 # Compilation flags
 # export ARCHFLAGS="-arch x86_64"
@@ -106,30 +116,12 @@ setopt interactivecomments
 # enable spelling corrector
 setopt CORRECT
 
-### Vim ###
-# use vim from MacVim instead. Note we install MacVim through
-# http://macvim-dev.github.io/macvim/ instead of HomeBrew, which
-# asks us to install a >5 GB full XCode stuff. Meanwhile this also
-# means we have to update the vim manually (I should write a script
-# for this)
-MACVIM_HOME="/Applications/MacVim.app/Contents/bin"
-export PATH=$MACVIM_HOME:$PATH
-# note the real vi is not able to copy stuff to clipboard; Thus we need to point it to
-# vim which is capable doing so
-alias vi=$MACVIM_HOME/vim
-
 ### Python ###
 # python shell tab-completion, osx doesn't provide this for free
 export PYTHONSTARTUP="$HOME/.pythonrc"
-# shortcut to start python shell in pipenv
-alias prp="pipenv run python"
-# pipenv setup: create virtual env in the same directory as the project so that
-# the cleanup of virtual env becomes very trivial(only need to remove the
-# project directory)
-export PIPENV_VENV_IN_PROJECT=true
 
 ### Java ###
-# Java development setup. See
+# Java development setup on OSX. See
 # https://www.mkyong.com/java/how-to-set-java_home-environment-variable-on-mac-os-x/
 # This makes the path to JDK of desired version available in current shell session
 export JAVA_HOME=$(/usr/libexec/java_home -v 12.0)
@@ -150,6 +142,32 @@ export GOPATH=~/workspace/go/hack
 # make go project executables easy to access
 export PATH=$PATH:$GOPATH/bin
 
+# Go module proxy (for region where golang.org is blocked, like China)
+# export GOPROXY=https://goproxy.io
+
+# include executable in local sbin
+export PATH="/usr/local/sbin:$PATH"
+
 # rbenv to manage ruby
 eval "$(rbenv init -)"
 
+# direnv to manage project-specific env var
+eval "$(direnv hook zsh)"
+
+# added by travis gem
+[ -f /Users/doobdoob/.travis/travis.sh ] && source /Users/doobdoob/.travis/travis.sh
+
+# handy utility functions
+
+# count string length in number of characters
+# Need to check if the current locale supports multi-byte chars or not
+function slen()
+{
+    echo -n "$@" | wc -m | sed -e 's/^[ \t]*//'
+}
+
+# function to print escaped, minified json string
+function lj()
+{
+    echo "$@" | python -m json.tool
+}

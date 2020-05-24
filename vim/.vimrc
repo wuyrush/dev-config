@@ -2,7 +2,6 @@
 " :help - vim manual
 " https://begriffs.com/posts/2019-07-19-history-use-vim.html
 " http://learnvimscriptthehardway.stevelosh.com/
-" 
 
 set nocompatible              " required
 filetype off                  " required
@@ -26,6 +25,10 @@ nmap ]Q :clast<cr>
 nmap [q :cprev<cr>
 nmap [Q :cfirst<cr>
 
+" Turn on virtual edit mode - this means we can move to arbitrary position in
+" editor. However it is not very useful to me
+" set virtualedit=all
+
 " set the runtime path to include Vundle and initialize
 set rtp+=~/.vim/bundle/Vundle.vim
 call vundle#begin()
@@ -37,18 +40,6 @@ call vundle#begin()
 Plugin 'gmarik/Vundle.vim'
 
 " Add all your plugins here (note older versions of Vundle used Bundle instead of Plugin)
-
-" enable code folding
-Plugin 'tmhedberg/SimpylFold'
-
-" enable autoindent
-Plugin 'vim-scripts/indentpython.vim'
-
-" enable auto-complete
-Plugin 'Valloric/YouCompleteMe'
-
-" Checking PEP8 syntax
-Plugin 'nvie/vim-flake8'
 
 " Use awesome vim color schemes
 Plugin 'rafi/awesome-vim-colorschemes'
@@ -63,18 +54,33 @@ Plugin 'elzr/vim-json'
 " inspecting a module
 Plugin 'majutsushi/tagbar'
 
-" Enable rainbow highlighting of matching parenthesis
-Plugin 'luochen1990/rainbow'
-
 " auto pair braces
 Plugin 'jiangmiao/auto-pairs'
 
 " vim-go https://github.com/fatih/vim-go
 Plugin 'fatih/vim-go'
 
-" Vim airline
-Plugin 'vim-airline/vim-airline'
-Plugin 'vim-airline/vim-airline-themes'
+" fast word quoting / wrapping
+Plugin 'tpope/vim-surround'
+
+" asynchronous linting to avoid clunky behavior when using Syntastic
+"Plugin 'dense-analysis/ale'
+
+" Enable rainbow highlighting of matching parenthesis
+"Plugin 'luochen1990/rainbow'
+
+" Vim airline for better status line
+"Plugin 'vim-airline/vim-airline'
+"Plugin 'vim-airline/vim-airline-themes'
+
+" Complementary pairs of mappings
+"Plugin 'tpope/vim-unimpaired'
+
+" auto-completion
+"Plugin 'ycm-core/YouCompleteMe'
+
+" TLA+ syntax support
+"Plugin 'hwayne/tla.vim' 
 
 " All of your Plugins must be added before the following line
 call vundle#end()            " required
@@ -87,9 +93,6 @@ nnoremap <C-K> <C-W><C-K>
 nnoremap <C-L> <C-W><C-L>
 nnoremap <C-H> <C-W><C-H>
 
-" force syntastic use Python3 checker
-let g:syntastic_python_python_exec = '/usr/local/bin/python3' 
-
 " enable emmet plugin just for html / css
 "let g:user_emmet_install_global = 0
 "autocmd FileType html.css EmmetInstall
@@ -99,17 +102,8 @@ nmap <F8> :TagbarToggle<CR>
 " put the tagbar panel on the left of editor panel
 let g:tagbar_left=1
 
-" Enable lighlighting of matching parentheses
-let g:rainbow_active = 1
-
-" Enable code folding
-set foldmethod=indent
-set foldlevel=99
-" key binding to control folding
-nnoremap <space> za
-
-" enable viewing of docstring of folded code
-let g:SimpylFold_docstring_preview=1
+" Enable highlighting of matching parentheses
+"let g:rainbow_active = 1
 
 " General indent
 " show existing tab with 4 spaces width
@@ -126,38 +120,23 @@ au BufNewFile,BufRead *.json,*.html,*.haml,*.css,*.xml,*.sh,*.conf:
     \ setlocal shiftwidth=2 |
 
 " Pretty your code
-let python_highlight_all=1
 syntax on
 
 "define BadWhiteSpace before using a match
-highlight BadWhitespace ctermbg=red guibg=red
+"highlight BadWhitespace ctermbg=red guibg=red
 
 " enable line number!
 set nu
 " Uncomment this line if you want to enable mouse in VIM
-set mouse=n
+" If really necessary, only enable it in normal mode so that it brings us less
+" trouble when editing
+" set mouse=n
 
-"Flag unnecessary spaces in Python code
-au BufRead,BufNewFile *.py,*.pyw,*.c,*.h match BadWhitespace /\s\+$/
-
-"Enable UTF-8 support. Important when working with Python 3.
+"Enable UTF-8 support
 set encoding=utf-8
 
 " Enable accessing the system's clipboard
 set clipboard=unnamed
-
-let g:ycm_autoclose_preview_window_after_completion=1
-map <leader>g  :YcmCompleter GoToDefinitionElseDeclaration<CR>
-
-"python with virtualenv support
-py << EOF
-import os
-import sys
-if 'VIRTUAL_ENV' in os.environ:
-  project_base_dir = os.environ['VIRTUAL_ENV']
-  activate_this = os.path.join(project_base_dir, 'bin/activate_this.py')
-  execfile(activate_this, dict(__file__=activate_this))
-EOF
 
 " for vim 8
 if (has("termguicolors"))
@@ -177,15 +156,16 @@ let g:deus_termcolors=256
 " Switch between Solarized dark and light theme by pressing F5
 " call togglebg#map("<F5>")
 
-" Always show statusline
-set laststatus=2
+" disable statusline as there is no much useful information
+"set laststatus=0
 
 " Config ctags to facilitate navigation in codebase
-set tags=./tags,./TAGS,tags;~,TAGS;~
+"set tags=./tags,./TAGS,tags;~,TAGS;~
 
 " Highlight the line we are in
-:set cursorline
-:set cursorcolumn
+set cursorline
+"set cursorcolumn
+
 " adjust the background and foreground of cursorline so that writing becomes
 " more comfortable!
 " http://vim.wikia.com/wiki/Highlight_current_line
@@ -208,6 +188,15 @@ nmap =j :%!python -m json.tool<CR>
 " shortcut to open a vertical termianl window
 command Vter vertical terminal
 
+" gopls LSP integration
+" https://github.com/golang/go/wiki/gopls
+let g:go_def_mode='gopls'
+let g:go_info_mode='gopls'
+
 " Vim airline buffer line
-let g:airline#extensions#tabline#enabled = 1
-let g:airline_theme='oceanicnext'
+"let g:airline#extensions#tabline#enabled = 1
+"let g:airline_theme='oceanicnext'
+" ale integration with vim-airline
+" Set this. Airline will handle the rest.
+"let g:airline#extensions#ale#enabled = 1
+
