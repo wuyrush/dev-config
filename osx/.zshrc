@@ -7,7 +7,7 @@ fi
 # export PATH=$HOME/bin:/usr/local/bin:$PATH
 
 # Path to your oh-my-zsh installation.
-export ZSH=/Users/doobdoob/.oh-my-zsh
+export ZSH=~/.oh-my-zsh
 
 # Set name of the theme to load. Optionally, if you set this to "random"
 # it'll load a random theme each time that oh-my-zsh is loaded.
@@ -77,12 +77,11 @@ source $ZSH/oh-my-zsh.sh
 # export LANG=en_US.UTF-8
 
 ### Vim ###
-# use Vim from HomeBrew instead
-VIM_HOME="/Applications/MacVim.app/Contents/bin"
+# use Vim from HomeBrew
 export PATH=$VIM_HOME:$PATH
 # note the real vi is not able to copy stuff to clipboard; Thus we need to point it to
 # vim which is capable doing so
-alias vi=$VIM_HOME/vim
+alias vi=vim
 
 # Preferred editor for local and remote sessions
 export EDITOR=vim
@@ -103,6 +102,7 @@ export GIT_EDITOR=vim
 # Example aliases
 # alias zshconfig="mate ~/.zshrc"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
+alias python="/usr/local/bin/python3"
 
 # style the zsh
 export TERM="xterm-256color"
@@ -131,14 +131,9 @@ export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
 [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
 
-### CommonLisp ###
-# shortcut to start Clozure CL
-export PATH=$HOME/bin:$PATH
-alias ccl=$HOME/bin/ccl64
-
 ### Golang ###
 # GOPATH
-export GOPATH=~/workspace/go/hack
+export GOPATH=~/go
 # make go project executables easy to access
 export PATH=$PATH:$GOPATH/bin
 
@@ -148,14 +143,8 @@ export PATH=$PATH:$GOPATH/bin
 # include executable in local sbin
 export PATH="/usr/local/sbin:$PATH"
 
-# rbenv to manage ruby
-eval "$(rbenv init -)"
-
 # direnv to manage project-specific env var
 eval "$(direnv hook zsh)"
-
-# added by travis gem
-[ -f /Users/doobdoob/.travis/travis.sh ] && source /Users/doobdoob/.travis/travis.sh
 
 # handy utility functions
 
