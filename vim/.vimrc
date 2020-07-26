@@ -52,20 +52,23 @@ set cursorline
 " adjust the background and foreground of cursorline so that writing becomes
 " more comfortable
 " http://vim.wikia.com/wiki/Highlight_current_line
-:hi CursorLine term=bold cterm=bold ctermbg=black guibg=black
+hi CursorLine term=bold cterm=bold ctermbg=black guibg=black
 " Highlight all the search matches
-:set hlsearch
-:hi Search guibg=Red
+set hlsearch
+hi Search guibg=Red
 " highlight when we enter character
 set incsearch
 " search for selected text in visual mode
 vnoremap // y/\V<C-R>=escape(@",'/\')<CR><CR>
 " quickfix shortcuts - navigate through the errors displayed in quickfix
 " buffer
-nmap ]q :cnext<cr>
-nmap ]Q :clast<cr>
-nmap [q :cprev<cr>
-nmap [Q :cfirst<cr>
+nnoremap ]q :cnext<cr>
+nnoremap ]Q :clast<cr>
+nnoremap [q :cprev<cr>
+nnoremap [Q :cfirst<cr>
+
+" Config leader key for rich mappings
+let mapleader=' '
 
 " ============== Plugins (and their tweaks) ==============
 " https://github.com/junegunn/vim-plug
@@ -92,7 +95,7 @@ call plug#end()
 
 " TODO: execute config setup only for file types that really need it
 " press F8 to tag bar
-nmap <F8> :TagbarToggle<CR>
+nnoremap <F8> :TagbarToggle<CR>
 " put the tagbar panel on the left of editor panel
 let g:tagbar_left=1
 " gopls LSP integration
@@ -105,11 +108,21 @@ let g:ycm_filetype_whitelist = {
     \   'c':    1
     \   }
 
-" ============== Productivity Tricks ==============
-" shortcut to jsonify text
-nmap =j :%!python3 -m json.tool<CR>
-" shortcut to open a vertical termianl window
+" ============== Productivity ==============
+" faster save
+nnoremap <Leader>w :w<CR>
+" faster save and quit
+nnoremap <Leader>q :wq<CR>
+" faster forced quit. Watch out for your unsaved changes!
+nnoremap <Leader>Q :q!<CR>
+" execute shell command and output the result in new scratch buffer, split in vertical
+command -nargs=* Vexc vnew | 0r! <args>
+nnoremap <Leader>e :Vexc<Space>
+" open a vertical termianl window
 command Vter vertical terminal
+nnoremap <Leader>t :Vter<CR>
+" jsonify text
+nnoremap =j :%!python3 -m json.tool<CR>
 
 " ============== Looks ==============
 " for vim 8
