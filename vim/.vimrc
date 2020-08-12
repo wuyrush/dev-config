@@ -115,6 +115,9 @@ nnoremap <Leader>w :w<CR>
 nnoremap <Leader>q :wq<CR>
 " faster forced quit. Watch out for your unsaved changes!
 nnoremap <Leader>Q :q!<CR>
+" faster panel splits
+nnoremap <Leader>v :vsplit<Space>
+nnoremap <Leader>V :split<Space>
 " execute shell command and output the result in new scratch buffer, split in vertical
 command -nargs=* Vexc vnew | 0r! <args>
 nnoremap <Leader>e :Vexc<Space>
