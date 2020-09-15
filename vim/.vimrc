@@ -33,7 +33,7 @@ set shiftwidth=4
 " On pressing tab, insert 4 spaces
 set expandtab
 " For editing web content, shell scripts and config files
-au BufNewFile,BufRead *.json,*.html,*.haml,*.css,*.xml,*.sh,*.conf:
+au BufNewFile,BufRead *.json,*.yml,*.html,*.haml,*.css,*.xml,*.sh,*.conf:
     \ setlocal tabstop=2 |
     \ setlocal softtabstop=2 |
     \ setlocal shiftwidth=2 |
