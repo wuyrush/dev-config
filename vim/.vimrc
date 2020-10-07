@@ -124,6 +124,8 @@ nnoremap <Leader>e :Vexc<Space>
 " open a vertical termianl window
 command Vter vertical terminal
 nnoremap <Leader>t :Vter<CR>
+" open a horizontal terminal
+nnoremap <Leader>T :terminal<CR>
 " jsonify text
 nnoremap =j :%!python3 -m json.tool<CR>
 
