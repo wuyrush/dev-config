@@ -118,9 +118,13 @@ nnoremap <Leader>Q :q!<CR>
 " faster panel splits
 nnoremap <Leader>v :vsplit<Space>
 nnoremap <Leader>V :split<Space>
+" faster edit
+nnoremap <Leader>e :edit<Space>
 " execute shell command and output the result in new scratch buffer, split in vertical
 command -nargs=* Vexc vnew | 0r! <args>
-nnoremap <Leader>e :Vexc<Space>
+nnoremap <Leader>E :Vexc<Space>
+" split and edit buffer
+nnoremap <Leader>b :sb<Space>
 " open a vertical termianl window
 command Vter vertical terminal
 nnoremap <Leader>t :Vter<CR>
