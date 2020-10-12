@@ -91,6 +91,8 @@ Plug 'majutsushi/tagbar', { 'for': ['go', 'c', 'python'] }
 Plug 'fatih/vim-go', { 'for': 'go' }
 " auto-completion
 Plug 'ycm-core/YouCompleteMe', { 'for': ['go', 'c'] }
+" edit html markup faster
+Plug 'mattn/emmet-vim', { 'for': ['html'] }
 call plug#end()
 
 " TODO: execute config setup only for file types that really need it
