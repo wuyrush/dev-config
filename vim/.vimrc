@@ -82,6 +82,8 @@ Plug 'tpope/vim-surround'
 Plug 'jiangmiao/auto-pairs'
 " Enable super(fuzzy) searching in VIM by ctrl + p, which similar to Sublime
 Plug 'kien/ctrlp.vim'
+" multi-cursor editing support
+Plug 'mg979/vim-visual-multi'
 " enable better json view
 Plug 'elzr/vim-json', { 'for': 'json' }
 " Enable tagbar so that we can see the tag structure of a file(useful if we are
