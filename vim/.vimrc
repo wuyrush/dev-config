@@ -127,6 +127,8 @@ command -nargs=* Vexc vnew | 0r! <args>
 nnoremap <Leader>E :Vexc<Space>
 " split and edit buffer
 nnoremap <Leader>b :sb<Space>
+" dim all highlights
+nnoremap <Leader>n :nohl<CR>
 " open a vertical termianl window
 command Vter vertical terminal
 nnoremap <Leader>t :Vter<CR>
