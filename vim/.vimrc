@@ -138,6 +138,8 @@ nnoremap <Leader>t :Vter<CR>
 nnoremap <Leader>T :terminal<CR>
 " jsonify text
 nnoremap =j :%!python3 -m json.tool<CR>
+" golang: run goimport on demand not on save due to its noticeable lag on large codebase
+nnoremap <Leader>g :GoImports<CR>
 
 " ============== Looks ==============
 " for vim 8
