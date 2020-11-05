@@ -39,8 +39,8 @@ au BufNewFile,BufRead *.json,*.yml,*.yaml,*.html,*.haml,*.css,*.xml,*.sh,*.conf:
     \ setlocal shiftwidth=2 |
 " Pretty your code
 syntax on
-" enable line number
-set nu
+" enable relative line number so that jumping by number become eaiser
+set number relativenumber
 "Enable UTF-8 support
 set encoding=utf-8
 " Enable accessing the system's clipboard
