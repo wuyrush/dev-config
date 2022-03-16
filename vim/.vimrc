@@ -88,16 +88,31 @@ Plug 'mg979/vim-visual-multi'
 Plug 'elzr/vim-json', { 'for': 'json' }
 " Enable tagbar so that we can see the tag structure of a file(useful if we are
 " inspecting a module
-Plug 'majutsushi/tagbar', { 'for': ['go', 'c', 'python'] }
+Plug 'majutsushi/tagbar', { 'for': ['go', 'c', 'python', 'rust'] }
 " vim-go https://github.com/fatih/vim-go
 Plug 'fatih/vim-go', { 'for': 'go' }
-" auto-completion
-Plug 'ycm-core/YouCompleteMe', { 'for': ['go', 'c'] }
+" rustlang
+Plug 'rust-lang/rust.vim', { 'for': ['rust'] }
+" Language Server Protocol plugins
+" supported commands see https://github.com/prabirshrestha/vim-lsp#supported-commands
+" TODO create mappings for commonly used ones like go-to-def/declaration
+Plug 'prabirshrestha/vim-lsp', { 'for': ['rust', 'go', 'c'] }
+Plug 'mattn/vim-lsp-settings', { 'for': ['rust', 'go', 'c'] }
+" auto-completion on edit
+Plug 'prabirshrestha/asyncomplete.vim', { 'for': ['rust', 'go', 'c'] }
+Plug 'prabirshrestha/asyncomplete-lsp.vim', { 'for': ['rust', 'go', 'c'] }
+
+" below list less commonly used but still useful plugins
+" multi-cursor editing support
+" NOTE try using vim builtin feature like macros to fulfill multi-spot-editing
+" need instead of just relying on plugins. Read the manual Luke.
+"Plug 'mg979/vim-visual-multi'
 " edit html markup faster
-Plug 'mattn/emmet-vim', { 'for': ['html'] }
+"Plug 'mattn/emmet-vim', { 'for': ['html'] }
+" old auto-completion tool
+"Plug 'ycm-core/YouCompleteMe', { 'for': ['go', 'c'] }
 call plug#end()
 
-" TODO: execute config setup only for file types that really need it
 " press F8 to tag bar
 nnoremap <F8> :TagbarToggle<CR>
 " put the tagbar panel on the left of editor panel
@@ -107,10 +122,13 @@ let g:tagbar_left=1
 let g:go_def_mode='gopls'
 let g:go_info_mode='gopls'
 " https://github.com/ycm-core/YouCompleteMe#the-gycm_filetype_whitelist-option
-let g:ycm_filetype_whitelist = {
-    \   'go':   1,
-    \   'c':    1
-    \   }
+" let g:ycm_filetype_whitelist = {
+"     \   'go':   1,
+"     \   'c':    1,
+"     \   'rust': 1
+"     \   }
+" rust-lang: fmt on save
+let g:rustfmt_autosave = 1
 
 " ============== Productivity ==============
 " faster save
