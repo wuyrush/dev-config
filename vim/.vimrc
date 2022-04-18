@@ -60,13 +60,6 @@ hi Search guibg=Red
 set incsearch
 " search for selected text in visual mode
 vnoremap // y/\V<C-R>=escape(@",'/\')<CR><CR>
-" quickfix shortcuts - navigate through the errors displayed in quickfix
-" buffer
-nnoremap ]q :cnext<cr>
-nnoremap ]Q :clast<cr>
-nnoremap [q :cprev<cr>
-nnoremap [Q :cfirst<cr>
-
 " Config leader key for rich mappings
 let mapleader=' '
 
@@ -82,25 +75,20 @@ Plug 'tpope/vim-surround'
 Plug 'jiangmiao/auto-pairs'
 " Enable super(fuzzy) searching in VIM by ctrl + p, which similar to Sublime
 Plug 'kien/ctrlp.vim'
-" multi-cursor editing support
-Plug 'mg979/vim-visual-multi'
 " enable better json view
 Plug 'elzr/vim-json', { 'for': 'json' }
 " Enable tagbar so that we can see the tag structure of a file(useful if we are
 " inspecting a module
 Plug 'majutsushi/tagbar', { 'for': ['go', 'c', 'python', 'rust'] }
-" vim-go https://github.com/fatih/vim-go
-Plug 'fatih/vim-go', { 'for': 'go' }
-" rustlang
-Plug 'rust-lang/rust.vim', { 'for': ['rust'] }
 " Language Server Protocol plugins
 " supported commands see https://github.com/prabirshrestha/vim-lsp#supported-commands
-" TODO create mappings for commonly used ones like go-to-def/declaration
 Plug 'prabirshrestha/vim-lsp', { 'for': ['rust', 'go', 'c'] }
 Plug 'mattn/vim-lsp-settings', { 'for': ['rust', 'go', 'c'] }
 " auto-completion on edit
 Plug 'prabirshrestha/asyncomplete.vim', { 'for': ['rust', 'go', 'c'] }
 Plug 'prabirshrestha/asyncomplete-lsp.vim', { 'for': ['rust', 'go', 'c'] }
+
+call plug#end()
 
 " below list less commonly used but still useful plugins
 " multi-cursor editing support
@@ -109,26 +97,16 @@ Plug 'prabirshrestha/asyncomplete-lsp.vim', { 'for': ['rust', 'go', 'c'] }
 "Plug 'mg979/vim-visual-multi'
 " edit html markup faster
 "Plug 'mattn/emmet-vim', { 'for': ['html'] }
-" old auto-completion tool
-"Plug 'ycm-core/YouCompleteMe', { 'for': ['go', 'c'] }
-call plug#end()
+" use lsp for any language-specific features
+" vim-go https://github.com/fatih/vim-go
+"Plug 'fatih/vim-go', { 'for': 'go' }
+" rustlang
+"Plug 'rust-lang/rust.vim', { 'for': ['rust'] }
 
-" press F8 to tag bar
-nnoremap <F8> :TagbarToggle<CR>
-" put the tagbar panel on the left of editor panel
-let g:tagbar_left=1
-" gopls LSP integration
+" golang gopls LSP integration
 " https://github.com/golang/go/wiki/gopls
-let g:go_def_mode='gopls'
-let g:go_info_mode='gopls'
-" https://github.com/ycm-core/YouCompleteMe#the-gycm_filetype_whitelist-option
-" let g:ycm_filetype_whitelist = {
-"     \   'go':   1,
-"     \   'c':    1,
-"     \   'rust': 1
-"     \   }
-" rust-lang: fmt on save
-let g:rustfmt_autosave = 1
+"let g:go_def_mode='gopls'
+"let g:go_info_mode='gopls'
 
 " ============== Productivity ==============
 " faster save
@@ -156,8 +134,48 @@ nnoremap <Leader>t :Vter<CR>
 nnoremap <Leader>T :terminal<CR>
 " jsonify text
 nnoremap =j :%!python3 -m json.tool<CR>
-" golang: run goimport on demand not on save due to its noticeable lag on large codebase
-nnoremap <Leader>g :GoImports<CR>
+" press F8 to tag bar
+nnoremap <F8> :TagbarToggle<CR>
+" put the tagbar panel on the left of editor panel
+let g:tagbar_left=1
+" lsp mapping setups 
+" https://github.com/prabirshrestha/vim-lsp#registering-servers
+function! s:on_lsp_buffer_enabled() abort
+    setlocal omnifunc=lsp#complete
+    setlocal signcolumn=yes
+    if exists('+tagfunc') | setlocal tagfunc=lsp#tagfunc | endif
+    nmap <buffer> gd <plug>(lsp-definition)
+    nmap <buffer> gs <plug>(lsp-document-symbol-search)
+    nmap <buffer> gS <plug>(lsp-workspace-symbol-search)
+    nmap <buffer> gr <plug>(lsp-references)
+    nmap <buffer> gi <plug>(lsp-implementation)
+    nmap <buffer> gt <plug>(lsp-type-definition)
+    nmap <buffer> gf <plug>(lsp-document-diagnostics)
+    nmap <buffer> [g <plug>(lsp-previous-diagnostic)
+    nmap <buffer> ]g <plug>(lsp-next-diagnostic)
+    nmap <buffer> K <plug>(lsp-hover)
+    nnoremap <buffer> <expr><c-v> lsp#scroll(+4)
+    nnoremap <buffer> <expr><c-d> lsp#scroll(-4)
+
+    " abort formatting if not done in 1s
+    let g:lsp_format_sync_timeout = 1000
+    " formatting selected file types on save
+    autocmd! BufWritePre *.rs,*.go,*.c,*.h call execute('LspDocumentFormatSync')
+    " TODO refer to doc to add more commands
+endfunction
+
+augroup lsp_install
+    au!
+    " call s:on_lsp_buffer_enabled only for languages that has the server registered.
+    autocmd User lsp_buffer_enabled call s:on_lsp_buffer_enabled()
+augroup END
+
+" quickfix shortcuts - navigate through the errors displayed in quickfix
+" buffer
+"nnoremap ]q :cnext<cr>
+"nnoremap ]Q :clast<cr>
+"nnoremap [q :cprev<cr>
+"nnoremap [Q :cfirst<cr>
 
 " ============== Looks ==============
 " for vim 8
