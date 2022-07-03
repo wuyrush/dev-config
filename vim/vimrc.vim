@@ -1,3 +1,5 @@
+" inspired by following rc:
+" - https://github.com/mitchellh/vim-misc/blob/master/vimrc.vim
 set nocompatible              " required?
 filetype off                  " required?
 
@@ -12,10 +14,7 @@ set writebackup
 " but do not persist backup after successful write
 set nobackup
 
-" ============== Editing, Moving around ==============
-" enable backspacing on existing text besides start of insert, so that
-" deletion behavior via CTRL-W and CTRL-H is more ergonomic 
-set backspace=indent,eol,start,nostop
+" ============== Motion ==============
 " key combos used in navigation of multiple splited panels
 " split navigations
 nnoremap <C-J> <C-W><C-J>
@@ -25,6 +24,32 @@ nnoremap <C-H> <C-W><C-H>
 " nature split opening
 set splitbelow
 set splitright
+" Highlight the line we are in
+set cursorline
+" adjust the background and foreground of cursorline so that writing becomes
+" more comfortable
+" http://vim.wikia.com/wiki/Highlight_current_line
+hi CursorLine term=bold cterm=bold ctermbg=black guibg=black
+" Highlight all the search matches
+set hlsearch
+hi Search guibg=Red
+" highlight when we enter character
+set incsearch
+" search for selected text in visual mode
+vnoremap // y/\V<C-R>=escape(@",'/\')<CR><CR>
+" Make j/k down and up visual lines instead of real ones. This makes word
+" wrapping a lot more pleasent.
+map j gj
+map k gk
+
+" ============== Editing ==============
+" the <leader> key
+let mapleader=' '
+" auto reload files changed outside but inside of vim
+set autoread
+" enable backspacing on existing text besides start of insert, so that
+" deletion behavior via CTRL-W and CTRL-H is more ergonomic 
+set backspace=indent,eol,start,nostop
 " General indent
 " show existing tab with 4 spaces width
 set tabstop=4
@@ -40,28 +65,14 @@ au BufNewFile,BufRead *.json,*.yml,*.yaml,*.html,*.haml,*.css,*.xml,*.sh,*.conf:
 " Pretty your code
 syntax on
 " enable relative line number so that jumping by number become eaiser
-set number relativenumber
+" ruler to show the line number and column in the status bar
+set number relativenumber ruler
 "Enable UTF-8 support
 set encoding=utf-8
 " Enable accessing the system's clipboard
 set clipboard=unnamed
-" disable statusline as there is no much useful information
-set laststatus=0
-" Highlight the line we are in
-set cursorline
-" adjust the background and foreground of cursorline so that writing becomes
-" more comfortable
-" http://vim.wikia.com/wiki/Highlight_current_line
-hi CursorLine term=bold cterm=bold ctermbg=black guibg=black
-" Highlight all the search matches
-set hlsearch
-hi Search guibg=Red
-" highlight when we enter character
-set incsearch
-" search for selected text in visual mode
-vnoremap // y/\V<C-R>=escape(@",'/\')<CR><CR>
-" Config leader key for rich mappings
-let mapleader=' '
+" linewrap indicator
+set showbreak=↪
 
 " ============== Plugins (and their tweaks) ==============
 " https://github.com/junegunn/vim-plug
@@ -170,13 +181,6 @@ augroup lsp_install
     autocmd User lsp_buffer_enabled call s:on_lsp_buffer_enabled()
 augroup END
 
-" quickfix shortcuts - navigate through the errors displayed in quickfix
-" buffer
-"nnoremap ]q :cnext<cr>
-"nnoremap ]Q :clast<cr>
-"nnoremap [q :cprev<cr>
-"nnoremap [Q :cfirst<cr>
-
 " ============== Looks ==============
 " for vim 8
 if (has("termguicolors"))
@@ -184,3 +188,17 @@ if (has("termguicolors"))
 endif
 colorscheme deus
 let g:deus_termcolors=256
+
+" disable statusline as there is no much useful information
+set laststatus=0
+" NOTE 3rd party color themes usually overwrite status line highlighting style
+" therefore we overwrite after applying color theme.
+" style status line on horizontal panel split. My take is to dim it visually
+" (seems vim always shows a status line for horizontal splitted panel
+" except the bottom most one) and stress it when we are in the panel associated
+" with the status line. See `:h StatusLineNC` to understand why we set highlighting
+" groups below differently
+" > When Vim knows the normal foreground, background and underline colors,
+" > 'fg', 'bg' and 'ul' can be used as color names.
+hi StatusLine term=bold cterm=bold ctermfg=fg ctermbg=bg guifg=fg guibg=bg
+hi StatusLineNC ctermfg=fg ctermbg=bg guifg=fg guibg=bg
